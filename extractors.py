@@ -1,3 +1,6 @@
+from datetime import datetime
+import re
+
 def get_data(soup):
     listing_data = {}
     soup_to_str = str(soup)
@@ -6,35 +9,131 @@ def get_data(soup):
         street_address = (soup.find('span', itemprop="streetAddress")).text
     except:
         street_address = ('Not Found')
-    address_locality = (soup.find('span', itemprop="addressLocality")).text
-    address_region = (soup.find('span', itemprop="addressRegion")).text
-    postal_code = (soup.find('span', itemprop="postalCode")).text
-
-    price = re.findall(r'(?<=Last Sold for \$)\d{0,3},{0,1}\d{1,3},{0,1}\d{1,3}', soup_to_str)
-    days_on_market = re.findall(r'(\d{1,3})[\s]*</div>\n<span>Days on market', soup_to_str)
-    sqft_house = re.findall(r'(\d{0,2},{0,1}\d{3})</span>[<>\s\/A-z]+sq\sft',soup_to_str)
-    sqft_lot = re.findall(r'lot_size":([\d.]+[^,])', soup_to_str)
-    full_bath = re.findall(r'Full\s{1}Bathrooms:\s{1}(\d{1,2})',soup_to_str)
-    half_bath = re.findall(r'1\/2\sBathrooms:([0-9\s]+[^<])',soup_to_str)
-    bedrooms = re.findall(r'Bedrooms:\s{1}(\d{1,2})',soup_to_str)
-    garage = re.findall(r'Garage\sSpaces:([\d\s]+[^<])', soup_to_str)
-    master_bath = re.findall(r'Master\sBath(s):\s([A-Z\s]+[^<])', soup_to_str)
-
-    cooling = re.findall(r'Cooling\sFeatures:(\s[A-z\s\/\(\)]+[^<])', soup_to_str)
-    heating = re.findall(r'Heating\sFeatures:(\s[A-z\s\/\(\)]+[^<])', soup_to_str)
-
-    annual_tax = re.findall(r'Annual Tax Amount:\s(\d{1,6}).', soup_to_str)
-    house_type = re.findall(r'Structure\sType:([\sA-z\/-]+[^<])',soup_to_str)
-    built = re.findall(r'[Bb]uilt:(\s+\d+)', soup_to_str)
-    updated = re.findall(r'Date\supdated:([0-9\s\/]+[^<])', soup_to_str)
-
-    neighborhood = re.findall(r'Source Neighborhood: ([A-z\s]*)', soup_to_str)
-    neighborhood_median_sales = re.findall(r'(\d{0,3},{0,1}\d{0,3},{0,1}\d{0,3})[\D]*Median Sales Price', soup_to_str)
-    neighborhood_median_days_on_market = re.findall(r'(\d{1,3})[\D]*Median Days on Market', soup_to_str)
-    neighborhood_price_SQFT = re.findall(r'(\d{0,3},{0,1}\d{0,3})[\D]*Price Per Sq Ft', soup_to_str)
-    association = re.findall(r'Association: ([A-z]{2,3})', soup_to_str)
-    association_monthly = re.findall(r'Monthly Association Fees:\s(\d{1,5})', soup_to_str)
-
+    
+    try:
+        address_locality = (soup.find('span', itemprop="addressLocality")).text
+    except:
+        address_locality = ('Not Found') 
+    
+    try:
+        address_region = (soup.find('span', itemprop="addressRegion")).text
+    except:
+        address_region = ('Not Found')
+        
+    try:
+        postal_code = (soup.find('span', itemprop="postalCode")).text
+    except:
+        postal_code = ('Not Found')
+        
+    try:
+        price = re.findall(r'(?<=Last Sold for \$)\d{0,3},{0,1}\d{1,3},{0,1}\d{1,3}', soup_to_str)
+    except:
+        price = ('Not Found')
+        
+    try:
+        days_on_market = re.findall(r'(\d{1,3})[\s]*</div>\n<span>Days on market', soup_to_str)
+    except:
+        days_on_market = ('Not Found')
+        
+    try:
+        sqft_house = re.findall(r'(\d{0,2},{0,1}\d{3})</span>[<>\s\/A-z]+sq\sft',soup_to_str)
+    except:
+        sqft_house = ('Not Found')
+        
+    try:
+        sqft_lot = re.findall(r'lot_size":([\d.]+[^,])', soup_to_str)
+    except:
+        sqft_lot = ('Not Found')
+        
+    try:
+        full_bath = re.findall(r'Full\s{1}Bathrooms:\s{1}(\d{1,2})',soup_to_str)
+    except:
+        full_bath = ('Not Found')
+        
+    try:
+        half_bath = re.findall(r'1\/2\sBathrooms:([0-9\s]+[^<])',soup_to_str)
+    except:
+        half_bath = ('Not Found')
+        
+    try:
+        bedrooms = re.findall(r'Bedrooms:\s{1}(\d{1,2})',soup_to_str)
+    except:
+        bedrooms = ('Not Found')
+        
+    try:
+        garage = re.findall(r'Garage\sSpaces:([\d\s]+[^<])', soup_to_str)
+    except:
+        garage = ('Not Found')
+        
+    try:
+        master_bath = re.findall(r'Master\sBath(s):\s([A-Z\s]+[^<])', soup_to_str)
+    except:
+        master_bath = ('Not Found')
+        
+    try:
+        cooling = re.findall(r'Cooling\sFeatures:(\s[A-z\s\/\(\)]+[^<])', soup_to_str)
+    except:
+        cooling = ('Not Found')
+        
+    try:
+        heating = re.findall(r'Heating\sFeatures:(\s[A-z\s\/\(\)]+[^<])', soup_to_str)
+    except:
+        heating = ('Not Found')
+        
+    try:
+        annual_tax = re.findall(r'Annual Tax Amount:\s(\d{1,6}).', soup_to_str)
+    except:
+        annual_tax = ('Not Found')
+        
+    try:
+        house_type = re.findall(r'Structure\sType:([\sA-z\/-]+[^<])',soup_to_str)
+    except:
+        house_type = ('Not Found')
+        
+    try:
+        built = re.findall(r'[Bb]uilt:(\s+\d+)', soup_to_str)
+    except:
+        built = ('Not Found')
+        
+    try:
+        updated = re.findall(r'Date\supdated:([0-9\s\/]+[^<])', soup_to_str)
+    except:
+        updated = ('Not Found')
+        
+    #********************************#
+    
+    try:
+        neighborhood = re.findall(r'Source Neighborhood: ([A-z\s]*)', soup_to_str)
+    except:
+        neighborhood = ('Not Found')
+        
+    try:
+        neighborhood_median_sales = re.findall(r'(\d{0,3},{0,1}\d{0,3},{0,1}\d{0,3})[\D]*Median Sales Price', soup_to_str)
+    except:
+        neighborhood_median_sales = ('Not Found')
+        
+    try:
+        neighborhood_median_days_on_market = re.findall(r'(\d{1,3})[\D]*Median Days on Market', soup_to_str)
+    except:
+        neighborhood_median_days_on_market = ('Not Found')
+        
+    try:
+        neighborhood_price_SQFT = re.findall(r'(\d{0,3},{0,1}\d{0,3})[\D]*Price Per Sq Ft', soup_to_str)
+    except:
+        neighborhood_price_SQFT = ('Not Found')
+        
+    try:
+        association = re.findall(r'Association: ([A-z]{2,3})', soup_to_str)
+    except:
+        association = ('Not Found')
+        
+    try:
+        association_monthly = re.findall(r'Monthly Association Fees:\s(\d{1,5})', soup_to_str)
+    except:
+        association_monthly = ('Not Found')
+        
+    #********************************#   
+        
     listing_data = {'Address': street_address,
                     'Locality': address_locality,
                     'Region': address_region,
@@ -59,6 +158,7 @@ def get_data(soup):
                     'Neighborhood Median DOM' : neighborhood_median_days_on_market,
                     'Neighborhood Price SQFT': neighborhood_price_SQFT,
                     'Association': association,
-                    'Association Monthly': association_monthly}
+                    'Association Monthly': association_monthly,
+                    'crawl time': datetime.now()}
     
     return listing_data
