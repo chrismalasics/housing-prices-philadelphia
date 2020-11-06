@@ -1,32 +1,33 @@
 from datetime import datetime
 import re
 
-def get_data(soup):
+def get_data(soup, url):
     listing_data = {}
     soup_to_str = str(soup)
     
     try:
-        street_address = (soup.find('span', itemprop="streetAddress")).text
+        street_address = str((soup.find('span', itemprop="streetAddress")).text)
     except:
         street_address = ('Not Found')
     
     try:
-        address_locality = (soup.find('span', itemprop="addressLocality")).text
+        address_locality = str((soup.find('span', itemprop="addressLocality")).text)
     except:
         address_locality = ('Not Found') 
     
     try:
-        address_region = (soup.find('span', itemprop="addressRegion")).text
+        address_region = str((soup.find('span', itemprop="addressRegion")).text)
     except:
         address_region = ('Not Found')
         
     try:
-        postal_code = (soup.find('span', itemprop="postalCode")).text
+        postal_code = str((soup.find('span', itemprop="postalCode")).text)
     except:
         postal_code = ('Not Found')
         
     try:
         price = re.findall(r'(?<=Last Sold for \$)\d{0,3},{0,1}\d{1,3},{0,1}\d{1,3}', soup_to_str)
+        price = price[0]
     except:
         price = ('Not Found')
         
@@ -37,26 +38,28 @@ def get_data(soup):
         
     try:
         sqft_house = re.findall(r'(\d{0,2},{0,1}\d{3})</span>[<>\s\/A-z]+sq\sft',soup_to_str)
+        sqft_house = sqft_house[0]
     except:
         sqft_house = ('Not Found')
         
     try:
         sqft_lot = re.findall(r'lot_size":([\d.]+[^,])', soup_to_str)
+        sqft_lot = sqft_lot[0]
     except:
         sqft_lot = ('Not Found')
         
     try:
-        full_bath = re.findall(r'Full\s{1}Bathrooms:\s{1}(\d{1,2})',soup_to_str)
+        full_bath = re.findall(r'"baths_full":\s*(\d{1,3})',soup_to_str)
     except:
         full_bath = ('Not Found')
         
     try:
-        half_bath = re.findall(r'1\/2\sBathrooms:([0-9\s]+[^<])',soup_to_str)
+        half_bath = re.findall(r'"baths_half":\s*(\d{1,3})',soup_to_str)
     except:
         half_bath = ('Not Found')
         
     try:
-        bedrooms = re.findall(r'Bedrooms:\s{1}(\d{1,2})',soup_to_str)
+        bedrooms = re.findall(r'Bed[A-z]*:\s{1}(\d{1,2})',soup_to_str)
     except:
         bedrooms = ('Not Found')
         
@@ -71,12 +74,12 @@ def get_data(soup):
         master_bath = ('Not Found')
         
     try:
-        cooling = re.findall(r'Cooling\sFeatures:(\s[A-z\s\/\(\)]+[^<])', soup_to_str)
+        cooling = re.findall(r'Cooling[A-z\s]*:\s([A-z\/\s,]*)', soup_to_str)
     except:
         cooling = ('Not Found')
         
     try:
-        heating = re.findall(r'Heating\sFeatures:(\s[A-z\s\/\(\)]+[^<])', soup_to_str)
+        heating = re.findall(r'Heating[A-z\s]*:\s([A-z\/\s,]*)', soup_to_str)
     except:
         heating = ('Not Found')
         
@@ -86,7 +89,7 @@ def get_data(soup):
         annual_tax = ('Not Found')
         
     try:
-        house_type = re.findall(r'Structure\sType:([\sA-z\/-]+[^<])',soup_to_str)
+        house_type = re.findall(r'[StructureProperty]*\s[Tt]ype:([\sA-z\/-]+[^<])',soup_to_str)
     except:
         house_type = ('Not Found')
         
@@ -103,7 +106,7 @@ def get_data(soup):
     #********************************#
     
     try:
-        neighborhood = re.findall(r'Source Neighborhood: ([A-z\s]*)', soup_to_str)
+        neighborhood = re.findall(r'>([A-z\s]*)<\/a>\s*neighborhood', soup_to_str)
     except:
         neighborhood = ('Not Found')
         
@@ -159,6 +162,7 @@ def get_data(soup):
                     'Neighborhood Price SQFT': neighborhood_price_SQFT,
                     'Association': association,
                     'Association Monthly': association_monthly,
+                    'URL': url,
                     'crawl time': datetime.now()}
     
     return listing_data
