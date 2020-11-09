@@ -1,4 +1,5 @@
-#request proxy list
+#helper functions
+
 def get_proxy_list():
     from http_request_randomizer.requests.proxy.requestProxy import RequestProxy
     proxies = []
